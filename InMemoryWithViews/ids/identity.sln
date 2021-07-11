@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31424.327
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServerHost.Quickstart.UI", "IdentityServerHost.Quickstart.UI.csproj", "{2BB51B14-2E58-42D8-8758-D13D01DA4312}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2BB51B14-2E58-42D8-8758-D13D01DA4312}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2BB51B14-2E58-42D8-8758-D13D01DA4312}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2BB51B14-2E58-42D8-8758-D13D01DA4312}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2BB51B14-2E58-42D8-8758-D13D01DA4312}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6A92745C-E527-449F-864A-7732980AAD4A}
+	EndGlobalSection
+EndGlobal
