@@ -1,0 +1,11 @@
+
+// Create Migration 
+dotnet ef migrations add InitialIdentityServerMigration -c PersistedGrantDbContext
+dotnet ef migrations add InitialIdentityServerMigration -c ConfigurationDbContext
+
+// Update Migration to db
+dotnet ef database update -c PersistedGrantDbContext
+dotnet ef database update -c ConfigurationDbContext
+
+// Seed data
+dotnet run ids /seed
