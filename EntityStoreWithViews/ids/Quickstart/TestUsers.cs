@@ -1,11 +1,11 @@
-using IdentityModel;
-using IdentityServer4.Test;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Text.Json;
+using IdentityModel;
 using IdentityServer4;
+using IdentityServer4.Test;
 
-namespace IdentityServerHost.Quickstart.UI
+namespace IdentityServerHost.Quickstart
 {
     public class TestUsers
     {

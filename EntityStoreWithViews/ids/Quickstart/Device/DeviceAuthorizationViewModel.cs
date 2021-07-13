@@ -1,4 +1,6 @@
-namespace IdentityServerHost.Quickstart.UI
+using IdentityServerHost.Quickstart.Consent;
+
+namespace IdentityServerHost.Quickstart.Device
 {
     public class DeviceAuthorizationViewModel : ConsentViewModel
     {

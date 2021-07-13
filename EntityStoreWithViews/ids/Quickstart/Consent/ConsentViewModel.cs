@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace IdentityServerHost.Quickstart.UI
+namespace IdentityServerHost.Quickstart.Consent
 {
     public class ConsentViewModel : ConsentInputModel
     {

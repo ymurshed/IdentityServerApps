@@ -6,7 +6,7 @@ using IdentityServer4.Models;
 using IdentityServer4.Test;
 using Newtonsoft.Json;
 
-namespace ids.SeedDataManager
+namespace IdentityServerHost.SeedDataManager
 {
     public static class Config
     {

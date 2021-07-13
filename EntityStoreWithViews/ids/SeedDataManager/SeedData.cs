@@ -6,14 +6,14 @@ using IdentityServer4;
 using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Mappers;
 using IdentityServer4.EntityFramework.Storage;
-using ids.Data;
+using IdentityServerHost.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Serilog;
 
-namespace ids.SeedDataManager
+namespace IdentityServerHost.SeedDataManager
 {
     public class SeedData
     {
