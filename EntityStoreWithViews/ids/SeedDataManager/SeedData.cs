@@ -22,20 +22,21 @@ namespace ids.SeedDataManager
             var migrationAssembly = typeof(SeedData).Assembly.FullName;
 
             var services = new ServiceCollection();
+            services.AddLogging();
 
-            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString, sqlOptions => sqlOptions.MigrationsAssembly(migrationAssembly)));
+            services.AddDbContext<AspNetDbContext>(db => db.UseSqlServer(connectionString, sqlOptions => sqlOptions.MigrationsAssembly(migrationAssembly)));
 
             services.AddIdentity<IdentityUser, IdentityRole>()
-                    .AddEntityFrameworkStores<ApplicationDbContext>()
+                    .AddEntityFrameworkStores<AspNetDbContext>()
                     .AddDefaultTokenProviders();
 
             services.AddOperationalDbContext(options =>
             {
-                options.ConfigureDbContext = db => db.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(migrationAssembly));
+                options.ConfigureDbContext = db => db.UseSqlServer(connectionString, sqlOptions => sqlOptions.MigrationsAssembly(migrationAssembly));
             });
             services.AddConfigurationDbContext(options =>
             {
-                options.ConfigureDbContext = db => db.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(migrationAssembly));
+                options.ConfigureDbContext = db => db.UseSqlServer(connectionString, sqlOptions => sqlOptions.MigrationsAssembly(migrationAssembly));
             });
             
             var serviceProvider = services.BuildServiceProvider();
@@ -47,15 +48,15 @@ namespace ids.SeedDataManager
             configurationDbContext.Database.Migrate();
             EnsureSeedData(configurationDbContext);
 
-            var applicationDbContext = scope.ServiceProvider.GetService<ApplicationDbContext>();
+            var applicationDbContext = scope.ServiceProvider.GetService<AspNetDbContext>();
             applicationDbContext.Database.Migrate();
             EnsureUsers(scope);
         }
 
         private static void EnsureUsers(IServiceScope scope)
-        {
-            var userMgr = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
-            var user = userMgr.FindByNameAsync("ymurshed").Result;
+        { 
+            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+            var user = userManager.FindByNameAsync("ymurshed").Result;
 
             if (user == null)
             {
@@ -66,7 +67,7 @@ namespace ids.SeedDataManager
                     EmailConfirmed = true
                 };
 
-                var result = userMgr.CreateAsync(user, "Pass@123").Result;
+                var result = userManager.CreateAsync(user, "Pass@123").Result;
                 if (!result.Succeeded)
                 {
                     throw new Exception(result.Errors.First().Description);
@@ -80,7 +81,7 @@ namespace ids.SeedDataManager
                     country = "Bangladesh"
                 };
 
-                result = userMgr.AddClaimsAsync(user, new[]
+                result = userManager.AddClaimsAsync(user, new[]
                 {
                       new Claim(JwtClaimTypes.Name, "Yaad Murshed"),
                       new Claim(JwtClaimTypes.GivenName, "Yaad"),
