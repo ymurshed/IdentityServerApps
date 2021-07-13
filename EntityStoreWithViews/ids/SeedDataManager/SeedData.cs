@@ -89,7 +89,7 @@ namespace IdentityServerHost.SeedDataManager
                       new Claim(JwtClaimTypes.Email, "murshed.yaad@gmail.com"),
                       new Claim(JwtClaimTypes.EmailVerified, "true", ClaimValueTypes.Boolean),
                       new Claim(JwtClaimTypes.Role, "true", "admin"),
-                      new Claim(JwtClaimTypes.WebSite, "http://ymurshed.com"),
+                      new Claim(JwtClaimTypes.WebSite, "https://devtalk360.wordpress.com/"),
                       new Claim(JwtClaimTypes.Address, JsonConvert.SerializeObject(address), IdentityServerConstants.ClaimValueTypes.Json)
                 }).Result;
                 if (!result.Succeeded)

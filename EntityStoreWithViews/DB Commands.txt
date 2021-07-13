@@ -2,10 +2,15 @@
 // Create Migration 
 dotnet ef migrations add InitialIdentityServerMigration -c PersistedGrantDbContext
 dotnet ef migrations add InitialIdentityServerMigration -c ConfigurationDbContext
+dotnet ef migrations add InitialIdentityServerMigration -c AspNetDbContext
 
 // Update Migration to db
 dotnet ef database update -c PersistedGrantDbContext
 dotnet ef database update -c ConfigurationDbContext
+dotnet ef database update -c AspNetDbContext
 
 // Seed data
-dotnet run ids /seed
+dotnet run IdentityServerHost /seed
+
+
+
