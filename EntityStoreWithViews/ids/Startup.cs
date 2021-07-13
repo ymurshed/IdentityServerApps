@@ -10,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using IdentityServerHost.Quickstart.UI;
+using ids.Data;
+using Microsoft.AspNetCore.Identity;
 
 namespace ids
 {
@@ -26,41 +28,41 @@ namespace ids
 
         public void ConfigureServices(IServiceCollection services)
         {
-            var migrationAssemblyFullName = typeof(Startup).Assembly.FullName;
-            services.AddControllersWithViews();
-
+            var migrationAssembly = typeof(Startup).Assembly.FullName;
             var connectionString = Configuration.GetConnectionString("DefaultConnection");
 
-            var builder = services.AddIdentityServer(options =>
-            {
-                options.Events.RaiseErrorEvents = true;
-                options.Events.RaiseInformationEvents = true;
-                options.Events.RaiseFailureEvents = true;
-                options.Events.RaiseSuccessEvents = true;
+            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString, sqlOptions => sqlOptions.MigrationsAssembly(migrationAssembly)));
+            
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                    .AddEntityFrameworkStores<ApplicationDbContext>();
 
-                // see https://identityserver4.readthedocs.io/en/latest/topics/resources.html
-                options.EmitStaticAudienceClaim = true;
-            })
-            .AddTestUsers(TestUsers.Users)
-            // this adds the config data from DB (clients, resources, CORS)
-            .AddConfigurationStore(options =>
-            {
-                options.ConfigureDbContext = builder => builder.UseSqlServer(connectionString, 
-                                                                             options => options.MigrationsAssembly(migrationAssemblyFullName));
-            })
-            // this adds the operational data from DB (codes, tokens, consents)
-            .AddOperationalStore(options =>
-            {
-                options.ConfigureDbContext = builder => builder.UseSqlServer(connectionString,
-                                                                             options => options.MigrationsAssembly(migrationAssemblyFullName));
+            services.AddIdentityServer(options =>
+                {
+                    options.Events.RaiseErrorEvents = true;
+                    options.Events.RaiseInformationEvents = true;
+                    options.Events.RaiseFailureEvents = true;
+                    options.Events.RaiseSuccessEvents = true;
 
-                // this enables automatic token cleanup. this is optional.
-                options.EnableTokenCleanup = true;
-            });
+                    // see https://identityserver4.readthedocs.io/en/latest/topics/resources.html
+                    options.EmitStaticAudienceClaim = true;
+                })
+                .AddAspNetIdentity<IdentityUser>()
+                .AddConfigurationStore(options =>
+                {
+                    options.ConfigureDbContext = dbContextOptionsBuilder => dbContextOptionsBuilder.UseSqlServer(connectionString, 
+                        sqlOptions => sqlOptions.MigrationsAssembly(migrationAssembly));
+                })
+                // this adds the operational data from DB (codes, tokens, consents)
+                .AddOperationalStore(options =>
+                {
+                    options.ConfigureDbContext = dbContextOptionsBuilder => dbContextOptionsBuilder.UseSqlServer(connectionString,
+                        sqlOptions => sqlOptions.MigrationsAssembly(migrationAssembly));
 
-            // not recommended for production - you need to store your key material somewhere secure
-            builder.AddDeveloperSigningCredential();
-
+                    // this enables automatic token cleanup. this is optional.
+                    options.EnableTokenCleanup = true;
+                })
+                .AddDeveloperSigningCredential();
+            
             services.AddAuthentication()
                 .AddGoogle(options =>
                 {
@@ -72,6 +74,8 @@ namespace ids
                     options.ClientId = "copy client ID from Google here";
                     options.ClientSecret = "copy client secret from Google here";
                 });
+
+            services.AddControllersWithViews();
         }
 
         public void Configure(IApplicationBuilder app)
@@ -83,7 +87,6 @@ namespace ids
             }
 
             app.UseStaticFiles();
-
             app.UseRouting();
             app.UseIdentityServer();
             app.UseAuthorization();
