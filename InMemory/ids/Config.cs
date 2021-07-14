@@ -26,6 +26,7 @@ namespace ids
                     SubjectId = "818727",
                     Username = "ymurshed",
                     Password = "ymurshed@03",
+                    
                     Claims =
                     {
                         new Claim(JwtClaimTypes.Name, "Yaad Murshed"),
@@ -33,7 +34,9 @@ namespace ids
                         new Claim(JwtClaimTypes.FamilyName, "Murshed"),
                         new Claim(JwtClaimTypes.Email, "murshed.yaad@gmail.com"),
                         new Claim(JwtClaimTypes.EmailVerified, "true", ClaimValueTypes.Boolean),
-                        new Claim(JwtClaimTypes.Role, "true", "admin"),
+                        new Claim(JwtClaimTypes.Role, "admin"),
+                        new Claim(JwtClaimTypes.ClientId, "m2m.client"),
+                        new Claim(JwtClaimTypes.Scope, "weatherapi.read"),
                         new Claim(JwtClaimTypes.Address, JsonConvert.SerializeObject(Address), IdentityServerConstants.ClaimValueTypes.Json),
                     }
                 } 
@@ -54,8 +57,8 @@ namespace ids
         public static IEnumerable<ApiScope> ApiScopes =>
             new[]
             {
-                new ApiScope("weatherapi.read"),
-                new ApiScope("weatherapi.write")
+                new ApiScope("weatherapi.read", new List<string> {"role"}),
+                new ApiScope("weatherapi.write", new List<string> {"role"})
             };
 
         public static IEnumerable<ApiResource> ApiResources =>
@@ -63,7 +66,7 @@ namespace ids
             {
                 new ApiResource("weatherapi")
                 {
-                    Scopes = new List<string> { "weatherapi.read" , "weatherapi.write" },
+                    Scopes = new List<string> { "weatherapi.read", "weatherapi.write"  },
                     ApiSecrets = new List<Secret> {new Secret("ScopeSecret".Sha256())},
                     UserClaims = new List<string> {"role"}
                 }
@@ -81,6 +84,7 @@ namespace ids
 
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
                     AllowedScopes = { "weatherapi.read", "weatherapi.write" },
+                    
                 },
 
                 // interactive client using code flow + pkce
